@@ -4,6 +4,7 @@ import com.bezkoder.spring.security.login.entity.User;
 import com.bezkoder.spring.security.login.extra.services.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,8 +16,10 @@ public class UserController {
     @Autowired
     private UserServiceImpl userService;
 
-    @GetMapping
-//    @PreAuthorize("hasRole('USER')")
+    //    @PreAuthorize("hasRole('USER')")
+
+    @GetMapping("")
+    @PreAuthorize("true")
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }

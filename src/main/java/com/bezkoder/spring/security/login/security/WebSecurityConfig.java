@@ -71,6 +71,7 @@ public class WebSecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/test/**").permitAll()
+//                .antMatchers("/api/users/**").permitAll()
 //                .antMatchers("/api/users/**").authenticated()
                 .antMatchers(h2ConsolePath + "/**").permitAll()
                 .anyRequest().authenticated();
