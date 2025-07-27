@@ -22,6 +22,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
@@ -67,16 +70,21 @@ public class WebSecurityConfig {
                 .cors().and()
                 .csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests()
-                .antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/api/test/**").permitAll()
-//                .antMatchers("/api/users/**").permitAll()
-//                .antMatchers("/api/users/**").authenticated()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and();
+
+        var authorizeRequests = http.authorizeRequests();
+
+//        authorizeRequests
+//                .antMatchers("/api/auth/").permitAll()
+//                .antMatchers("/api/test/").permitAll();
+        Arrays.stream(getPermitAllPathsArray())
+                .forEach(path -> authorizeRequests.antMatchers(path).permitAll());
+
+
+        authorizeRequests
                 .antMatchers(h2ConsolePath + "/**").permitAll()
                 .anyRequest().authenticated();
-//                .anyRequest().permitAll()
-;
+
         // Enable H2 console in browser
         http.headers().frameOptions().sameOrigin();
 
@@ -85,6 +93,15 @@ public class WebSecurityConfig {
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    public String[] getPermitAllPathsArray() {
+        String[] paths = {
+                "/api/test/**",
+                "/api/public/**",
+                "/api/auth/**"
+        };
+        return paths;
     }
 
     // Optional: Seed roles into DB (ONLY for development, not production!)

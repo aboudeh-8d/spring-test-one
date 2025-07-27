@@ -1,6 +1,7 @@
 package com.bezkoder.spring.security.login.seeders;
 
 import com.bezkoder.spring.security.login.enums.ERole;
+import com.bezkoder.spring.security.login.enums.EUserLanguage;
 import com.bezkoder.spring.security.login.enums.EUserStatus;
 import com.bezkoder.spring.security.login.entity.Role;
 import com.bezkoder.spring.security.login.entity.User;
@@ -42,7 +43,7 @@ public class UserSeederOld implements CommandLineRunner {
                 .orElseThrow(() -> new RuntimeException("ROLE_CLIENT not found"));
 
         // Create users
-        User admin = new User("admin", "Admin", "admin@gmail.com", EUserStatus.ACTIVE, encoder.encode("12345678"));
+        User admin = new User("admin", "Admin", "admin@gmail.com", EUserStatus.ACTIVE , EUserLanguage.EN, encoder.encode("12345678"));
         admin.setEnabled(true);
         admin.setRoles(Set.of(adminRole));
 

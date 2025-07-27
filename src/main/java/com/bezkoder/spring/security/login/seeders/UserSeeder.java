@@ -2,6 +2,7 @@
 package com.bezkoder.spring.security.login.seeders;
 
 import com.bezkoder.spring.security.login.enums.ERole;
+import com.bezkoder.spring.security.login.enums.EUserLanguage;
 import com.bezkoder.spring.security.login.enums.EUserStatus;
 import com.bezkoder.spring.security.login.entity.Role;
 import com.bezkoder.spring.security.login.entity.User;
@@ -27,7 +28,7 @@ public class UserSeeder {
 
         Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN).orElseThrow();
 
-        User admin = new User("admin", "Admin", "admin@gmail.com", EUserStatus.ACTIVE, encoder.encode("12345678"));
+        User admin = new User("admin", "Admin", "admin@gmail.com", EUserStatus.ACTIVE, EUserLanguage.EN, encoder.encode("12345678"));
         admin.setRoles(Set.of(adminRole));
         userRepository.save(admin);
 

@@ -1,5 +1,7 @@
 package com.bezkoder.spring.security.login.payload.request;
 
+import com.bezkoder.spring.security.login.enums.EUserLanguage;
+
 import java.util.Set;
 
 import javax.validation.constraints.*;
@@ -19,7 +21,9 @@ public class SignupRequest {
     private String fullname;
 
     private Set<String> role;
-    
+
+    private EUserLanguage language;
+
     @NotBlank
     @Size(min = 6, max = 40)
     private String password;
@@ -59,4 +63,11 @@ public class SignupRequest {
     public String getFullname() { return fullname; }
     public void setFullname(String fullname) { this.fullname = fullname; }
 
+    public EUserLanguage getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(EUserLanguage language) {
+        this.language = language;
+    }
 }

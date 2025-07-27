@@ -7,12 +7,16 @@ public class UserInfoResponse {
 	private String username;
 	private String email;
 	private List<String> roles;
+	private LocalizedEnum status;
+	private EUserLanguage language;
 
-	public UserInfoResponse(Long id, String username, String email, List<String> roles) {
+	public UserInfoResponse(Long id, String username, String email, List<String> roles , LocalizedEnum status, EUserLanguage language) {
 		this.id = id;
 		this.username = username;
 		this.email = email;
 		this.roles = roles;
+		this.status = status;
+		this.language = language;
 	}
 
 	public Long getId() {
@@ -41,5 +45,21 @@ public class UserInfoResponse {
 
 	public List<String> getRoles() {
 		return roles;
+	}
+
+	public LocalizedEnum getStatus() {
+		return status;
+	}
+
+	public void setStatus(LocalizedEnum status) {
+		this.status = status;
+	}
+
+	public LocalizedEnum getLanguage() {
+		return EnumLocalizationUtil.localizeEnum(this.language, "user_language");
+	}
+
+	public void setLanguage(EUserLanguage language) {
+		this.language = language;
 	}
 }

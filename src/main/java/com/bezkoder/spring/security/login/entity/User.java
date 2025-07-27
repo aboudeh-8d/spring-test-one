@@ -1,6 +1,9 @@
 package com.bezkoder.spring.security.login.entity;
 
+import com.bezkoder.spring.security.login.enums.EUserLanguage;
 import com.bezkoder.spring.security.login.enums.EUserStatus;
+import com.bezkoder.spring.security.login.service.helper.EnumLocalizationUtil;
+import com.bezkoder.spring.security.login.service.helper.LocalizedEnum;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,113 +15,137 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "users",
-       uniqueConstraints = {
-               @UniqueConstraint(columnNames = "username"),
-           @UniqueConstraint(columnNames = "email")
-       })
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "username"),
+                @UniqueConstraint(columnNames = "email")
+        })
 public class User {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @NotBlank
-  @Size(max = 20)
-  private String username;
+    @NotBlank
+    @Size(max = 20)
+    private String username;
 
-  @NotBlank
-  @Size(max = 20)
-  private String fullname;
+    @NotBlank
+    @Size(max = 20)
+    private String fullname;
 
-  @Enumerated(EnumType.STRING)
-  @Column(length = 20)
-  private EUserStatus status;
-
-
-
-  @Column(name = "is_enabled")
-  private Boolean isEnabled = false;
-
-  @NotBlank
-  @Size(max = 50)
-  @Email
-  private String email;
-
-  @NotBlank
-  @Size(max = 120)
-  private String password;
-
-  @ManyToMany(fetch = FetchType.EAGER)
-  @JoinTable(
-          name = "user_roles",
-          joinColumns = @JoinColumn(name = "user_id"),
-          inverseJoinColumns = @JoinColumn(name = "role_id"))
-  private Set<Role> roles = new HashSet<>();
+    @NotBlank
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private EUserStatus status = EUserStatus.ACTIVE;
 
 
+    @Column(name = "is_enabled")
+    private Boolean isEnabled = false;
 
-  public User() {
-  }
+    @NotBlank
+    @Size(max = 50)
+    @Email
+    private String email;
 
-  public User(String username, String fullname, String email, EUserStatus status ,String password) {
-    this.username = username;
-    this.fullname = fullname;
-    this.status = status;
-    this.email = email;
-    this.password = password;
-  }
+    @NotBlank
+    @Size(max = 120)
+    private String password;
 
-  public Long getId() {
-    return id;
-  }
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getUsername() {
-    return username;
-  }
-
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
-  }
+    @NotBlank
+    @Enumerated(EnumType.STRING)
+    @Column(name = "language")
+    private EUserLanguage language = EUserLanguage.EN;
 
 
-  public @NotBlank @Size(max = 20) String getFullname() {return fullname;}
+    public User() {
+    }
 
-  public void setFullname(@NotBlank @Size(max = 20) String fullname) { this.fullname = fullname;}
+    public User(String username, String fullname, String email, EUserStatus status, EUserLanguage language, String password) {
+        this.username = username;
+        this.fullname = fullname;
+        this.status = status;
+        this.language = language;
+        this.email = email;
+        this.password = password;
+    }
 
-  public EUserStatus getStatus() { return status;}
+    public Long getId() {
+        return id;
+    }
 
-  public void setStatus(EUserStatus status) {this.status = status;}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public Boolean getEnabled() {return isEnabled;}
+    public String getUsername() {
+        return username;
+    }
 
-  public void setEnabled(Boolean enabled) { isEnabled = enabled;}
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-  public Set<Role> getRoles() {
-    return roles;
-  }
+    public String getEmail() {
+        return email;
+    }
 
-  public void setRoles(Set<Role> roles) {
-    this.roles = roles;
-  }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
 
+    public @NotBlank @Size(max = 20) String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(@NotBlank @Size(max = 20) String fullname) {
+        this.fullname = fullname;
+    }
+
+    public EUserStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(EUserStatus status) {
+        this.status = status;
+    }
+
+    public Boolean getEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        isEnabled = enabled;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+
+    public EUserLanguage getLanguage() {
+        return this.language;
+    }
+
+    public void setLanguage(EUserLanguage language) {
+        this.language = language;
+    }
 }
