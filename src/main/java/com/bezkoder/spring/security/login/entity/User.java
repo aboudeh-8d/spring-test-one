@@ -1,9 +1,8 @@
 package com.bezkoder.spring.security.login.entity;
 
+import com.bezkoder.spring.security.login.entity.base.BaseEntity;
 import com.bezkoder.spring.security.login.enums.EUserLanguage;
 import com.bezkoder.spring.security.login.enums.EUserStatus;
-import com.bezkoder.spring.security.login.service.helper.EnumLocalizationUtil;
-import com.bezkoder.spring.security.login.service.helper.LocalizedEnum;
 
 import java.util.HashSet;
 import java.util.Set;

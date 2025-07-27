@@ -1,17 +1,21 @@
 package com.bezkoder.spring.security.login.controllers;
 
 import com.bezkoder.spring.security.login.config.MyLocalResolver;
+import com.bezkoder.spring.security.login.dto.user.UserSummary;
 import com.bezkoder.spring.security.login.entity.User;
-import com.bezkoder.spring.security.login.extra.services.impl.UserServiceImpl;
-import com.bezkoder.spring.security.login.payload.response.UserInfoResponse;
-import com.bezkoder.spring.security.login.service.helper.EnumLocalizationUtil;
-import com.bezkoder.spring.security.login.service.helper.LocalizedEnum;
+import com.bezkoder.spring.security.login.service.UserServiceImpl;
+import com.bezkoder.spring.security.login.dto.user.UserInfoResponse;
 
 import com.bezkoder.spring.security.login.service.helper.TranslationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -41,10 +45,48 @@ public class UserController {
                     List<String> roles = user.getRoles().stream()
                             .map(role -> role.getName().name())
                             .toList();
-                    return new UserInfoResponse(user.getId(), user.getUsername(), user.getEmail(), roles, user.getStatus() , user.getLanguage());
+                    return new UserInfoResponse(user.getId(), user.getUsername(), user.getEmail(), roles, user.getStatus(), user.getLanguage());
                 }).toList();
 
         return ResponseEntity.ok(response); // HTTP 200 with body
+    }
+
+    @GetMapping("/paginated")
+    public ResponseEntity<Page<UserInfoResponse>> getUsersPaginated(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String sort,
+            @RequestParam(defaultValue = "DESC") String direction) {
+
+        Page<User> usersPage = userService.getPaginatedUsers(page, size, sort, direction);
+
+        Page<UserInfoResponse> responsePage = usersPage.map(user -> {
+            List<String> roles = user.getRoles().stream()
+                    .map(role -> role.getName().name())
+                    .toList();
+
+            return new UserInfoResponse(
+                    user.getId(),
+                    user.getUsername(),
+                    user.getEmail(),
+                    roles,
+                    user.getStatus(),
+                    user.getLanguage()
+            );
+        });
+
+        return ResponseEntity.ok(responsePage);
+    }
+
+    @GetMapping("/summaries")
+    public ResponseEntity<Page<UserSummary>> getUserSummaries(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String sort,
+            @RequestParam(defaultValue = "DESC") String direction) {
+
+        Page<UserSummary> summaries = userService.getUserSummaries(page, size, sort, direction);
+        return ResponseEntity.ok(summaries);
     }
 
     @GetMapping("/{id}")

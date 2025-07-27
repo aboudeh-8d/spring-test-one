@@ -29,7 +29,7 @@ import com.bezkoder.spring.security.login.enums.ERole;
 import com.bezkoder.spring.security.login.entity.Role;
 import com.bezkoder.spring.security.login.entity.User;
 import com.bezkoder.spring.security.login.payload.request.LoginRequest;
-import com.bezkoder.spring.security.login.payload.request.SignupRequest;
+import com.bezkoder.spring.security.login.dto.user.SignupRequest;
 import com.bezkoder.spring.security.login.payload.response.MessageResponse;
 import com.bezkoder.spring.security.login.repository.RoleRepository;
 import com.bezkoder.spring.security.login.repository.UserRepository;

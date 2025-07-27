@@ -1,10 +1,8 @@
 package com.bezkoder.spring.security.login.controllers;
 
 import com.bezkoder.spring.security.login.config.MyLocalResolver;
-import com.bezkoder.spring.security.login.extra.services.impl.UserServiceImpl;
-import com.bezkoder.spring.security.login.payload.response.UserInfoResponse;
-import com.bezkoder.spring.security.login.service.helper.EnumLocalizationUtil;
-import com.bezkoder.spring.security.login.service.helper.LocalizedEnum;
+import com.bezkoder.spring.security.login.service.UserServiceImpl;
+import com.bezkoder.spring.security.login.dto.user.UserInfoResponse;
 import com.bezkoder.spring.security.login.service.helper.TranslationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

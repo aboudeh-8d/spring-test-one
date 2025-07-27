@@ -1,5 +1,6 @@
 package com.bezkoder.spring.security.login.entity;
 
+import com.bezkoder.spring.security.login.entity.base.BaseEntity;
 import com.bezkoder.spring.security.login.enums.ERole;
 
 import javax.persistence.*;

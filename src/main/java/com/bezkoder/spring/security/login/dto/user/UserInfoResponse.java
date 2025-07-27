@@ -1,6 +1,5 @@
-package com.bezkoder.spring.security.login.payload.response;
+package com.bezkoder.spring.security.login.dto.user;
 
-import com.bezkoder.spring.security.login.entity.Role;
 import com.bezkoder.spring.security.login.enums.EUserLanguage;
 import com.bezkoder.spring.security.login.enums.EUserStatus;
 import com.bezkoder.spring.security.login.service.helper.EnumLocalizationUtil;

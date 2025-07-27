@@ -1,9 +1,13 @@
-package com.bezkoder.spring.security.login.extra.services.impl;
+package com.bezkoder.spring.security.login.service;
 
+import com.bezkoder.spring.security.login.dto.user.UserSummary;
 import com.bezkoder.spring.security.login.entity.User;
 import com.bezkoder.spring.security.login.repository.UserRepository;
-import com.bezkoder.spring.security.login.extra.services.UserService;
+import com.bezkoder.spring.security.login.service.interfaces.UserService;
+import com.bezkoder.spring.security.login.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +22,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    public Page<UserSummary> getUserSummaries(int page, int size, String sortField, String direction) {
+        Pageable pageable = PaginationUtil.getPageable(page, size, sortField, direction);
+        return userRepository.findAllBy(pageable);
+    }
+
+    public Page<User> getPaginatedUsers(int page, int size, String sortField, String direction) {
+        Pageable pageable = PaginationUtil.getPageable(page, size, sortField, direction);
+        return userRepository.findAll(pageable);
     }
 
     @Override
