@@ -1,4 +1,4 @@
-package com.bezkoder.spring.security.login.extra.aspect;
+package com.bezkoder.spring.security.login.aspect;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;

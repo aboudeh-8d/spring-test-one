@@ -2,7 +2,7 @@ package com.bezkoder.spring.security.login.controllers;
 
 import com.bezkoder.spring.security.login.config.MyLocalResolver;
 import com.bezkoder.spring.security.login.service.UserServiceImpl;
-import com.bezkoder.spring.security.login.dto.user.UserInfoResponse;
+import com.bezkoder.spring.security.login.dto.response.UserInfoResponse;
 import com.bezkoder.spring.security.login.service.helper.TranslationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

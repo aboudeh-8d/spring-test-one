@@ -1,4 +1,4 @@
-package com.bezkoder.spring.security.login.seeders;
+package com.bezkoder.spring.security.login.seeder;
 
 import com.bezkoder.spring.security.login.enums.ERole;
 import com.bezkoder.spring.security.login.enums.EUserLanguage;

@@ -1,18 +1,15 @@
 package com.bezkoder.spring.security.login.controllers;
 
 import com.bezkoder.spring.security.login.config.MyLocalResolver;
-import com.bezkoder.spring.security.login.dto.user.UserSummary;
+import com.bezkoder.spring.security.login.dto.projection.UserSummary;
 import com.bezkoder.spring.security.login.entity.User;
 import com.bezkoder.spring.security.login.service.UserServiceImpl;
-import com.bezkoder.spring.security.login.dto.user.UserInfoResponse;
+import com.bezkoder.spring.security.login.dto.response.UserInfoResponse;
 
 import com.bezkoder.spring.security.login.service.helper.TranslationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -92,9 +89,23 @@ public class UserController {
     @GetMapping("/{id}")
 //    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 //    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+    public ResponseEntity<UserInfoResponse> getUserById(@PathVariable Long id) {
         return userService.getUserById(id)
-                .map(ResponseEntity::ok)
+                .map(user -> {
+                    List<String> roles = user.getRoles().stream()
+                            .map(role -> role.getName().name())
+                            .toList();
+
+                    UserInfoResponse response = new UserInfoResponse(
+                            user.getId(),
+                            user.getUsername(),
+                            user.getEmail(),
+                            roles,
+                            user.getStatus(),
+                            user.getLanguage()
+                    );
+                    return ResponseEntity.ok(response);
+                })
                 .orElse(ResponseEntity.notFound().build());
     }
 

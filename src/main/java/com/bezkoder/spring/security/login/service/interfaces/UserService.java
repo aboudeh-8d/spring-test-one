@@ -1,8 +1,6 @@
 package com.bezkoder.spring.security.login.service.interfaces;
 
-import com.bezkoder.spring.security.login.dto.user.UserSummary;
 import com.bezkoder.spring.security.login.entity.User;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;

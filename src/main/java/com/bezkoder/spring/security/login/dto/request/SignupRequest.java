@@ -1,4 +1,4 @@
-package com.bezkoder.spring.security.login.dto.user;
+package com.bezkoder.spring.security.login.dto.request;
 
 import com.bezkoder.spring.security.login.enums.EUserLanguage;
 

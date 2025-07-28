@@ -2,7 +2,7 @@ package com.bezkoder.spring.security.login.repository;
 
 import java.util.Optional;
 
-import com.bezkoder.spring.security.login.dto.user.UserSummary;
+import com.bezkoder.spring.security.login.dto.projection.UserSummary;
 import com.bezkoder.spring.security.login.repository.base.BaseRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

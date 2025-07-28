@@ -1,4 +1,4 @@
-package com.bezkoder.spring.security.login.payload.response;
+package com.bezkoder.spring.security.login.dto.response;
 
 public class MessageResponse {
 	private String message;

@@ -1,4 +1,4 @@
-package com.bezkoder.spring.security.login.seeders;
+package com.bezkoder.spring.security.login.seeder;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
