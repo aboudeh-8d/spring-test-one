@@ -3,7 +3,7 @@ package com.bezkoder.spring.security.login.controllers;
 import com.bezkoder.spring.security.login.config.MyLocalResolver;
 import com.bezkoder.spring.security.login.dto.projection.UserSummary;
 import com.bezkoder.spring.security.login.entity.User;
-import com.bezkoder.spring.security.login.service.UserServiceImpl;
+import com.bezkoder.spring.security.login.service.UserService;
 import com.bezkoder.spring.security.login.dto.response.UserInfoResponse;
 
 import com.bezkoder.spring.security.login.service.helper.TranslationService;
@@ -21,7 +21,7 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private UserServiceImpl userService;
+    private UserService userService;
 
     @Autowired
     private MessageSource messageSource;
@@ -38,7 +38,7 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<List<UserInfoResponse>> getAllUsers() {
-        List<UserInfoResponse> response = userService.getAllUsers().stream()
+        List<UserInfoResponse> response = userService.findAll().stream()
                 .map(user -> {
                     List<String> roles = user.getRoles().stream()
                             .map(role -> role.getName().name())
@@ -91,7 +91,7 @@ public class UserController {
 //    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 //    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserInfoResponse> getUserById(@PathVariable Long id) {
-        return userService.getUserById(id)
+        return userService.findById(id)
                 .map(user -> {
                     List<String> roles = user.getRoles().stream()
                             .map(role -> role.getName().name())
@@ -113,7 +113,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody User user) {
         try {
-            return ResponseEntity.ok(userService.createUser(user));
+            return ResponseEntity.ok(userService.save(user));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -121,14 +121,16 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User user) {
-        return userService.updateUser(id, user)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        try {
+            return ResponseEntity.ok(userService.update(id ,user));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
-        return userService.deleteUser(id)
+        return userService.delete(id)
                 ? ResponseEntity.ok().build()
                 : ResponseEntity.notFound().build();
     }

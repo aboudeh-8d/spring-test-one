@@ -1,7 +1,7 @@
 package com.bezkoder.spring.security.login.controllers;
 
 import com.bezkoder.spring.security.login.config.MyLocalResolver;
-import com.bezkoder.spring.security.login.service.UserServiceImpl;
+import com.bezkoder.spring.security.login.service.UserService;
 import com.bezkoder.spring.security.login.dto.response.UserInfoResponse;
 import com.bezkoder.spring.security.login.service.helper.TranslationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import java.util.List;
 @RequestMapping("/api/test")
 public class TestController {
     @Autowired
-    private UserServiceImpl userService;
+    private UserService userService;
 
     @Autowired
     private MyLocalResolver myLocalResolver;
@@ -58,7 +58,7 @@ public class TestController {
 
     @GetMapping("/users")
     public ResponseEntity<List<UserInfoResponse>> getAllUsers() {
-        List<UserInfoResponse> response = userService.getAllUsers().stream()
+        List<UserInfoResponse> response = userService.findAll().stream()
                 .map(user -> {
                     List<String> roles = user.getRoles().stream()
                             .map(role -> role.getName().name())
