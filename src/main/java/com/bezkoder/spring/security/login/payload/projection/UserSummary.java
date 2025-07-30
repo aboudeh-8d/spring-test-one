@@ -1,4 +1,4 @@
-package com.bezkoder.spring.security.login.dto.projection;
+package com.bezkoder.spring.security.login.payload.projection;
 
 public interface UserSummary {
     Long getId();

@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
-import java.util.Locale;
 
 @Component
 public class EnumLocalizationUtil {
@@ -18,12 +17,10 @@ public class EnumLocalizationUtil {
 
     public static LocalizedEnum localizeEnum(Enum<?> enumValue, String prefix) {
         if (enumValue == null) {
-            return new LocalizedEnum(null, null);  // return empty values if enum is null
+            return new LocalizedEnum(null, null);
         }
         String key = enumValue.name();
         String translationKey = prefix + "." + key.toLowerCase();
-        Locale locale = LocaleContextHolder.getLocale();
-//        myLocalResolver.resolveLocale(request)
         String value = translationServiceStatic.getMessage(translationKey);
         return new LocalizedEnum(key, value);
     }

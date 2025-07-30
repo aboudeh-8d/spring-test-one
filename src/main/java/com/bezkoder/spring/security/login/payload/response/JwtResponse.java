@@ -1,4 +1,4 @@
-package com.bezkoder.spring.security.login.dto.response;
+package com.bezkoder.spring.security.login.payload.response;
 
 import java.util.List;
 

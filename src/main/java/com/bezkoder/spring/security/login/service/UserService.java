@@ -1,7 +1,10 @@
 package com.bezkoder.spring.security.login.service;
 
-import com.bezkoder.spring.security.login.dto.projection.UserSummary;
+import com.bezkoder.spring.security.login.payload.request.UserUpdateRequest;
+import com.bezkoder.spring.security.login.payload.projection.UserSummary;
+import com.bezkoder.spring.security.login.entity.Role;
 import com.bezkoder.spring.security.login.entity.User;
+import com.bezkoder.spring.security.login.repository.RoleRepository;
 import com.bezkoder.spring.security.login.repository.UserRepository;
 import com.bezkoder.spring.security.login.service.base.BaseService;
 import com.bezkoder.spring.security.login.utilities.Pagination;
@@ -9,17 +12,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionSystemException;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.List;
-import java.util.Optional;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 @Service
 //public class UserService extends BaseService<User, Long> implements UserService {
 public class UserService extends BaseService<User, Long>{
 
     @Autowired
     private UserRepository userRepository;
+
+
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
 
     @Override
     protected JpaRepository<User, Long> getRepository() {
@@ -46,33 +63,36 @@ public class UserService extends BaseService<User, Long>{
         return userRepository.save(user);
     }
 
-//    public User update(Long id, UserUpdateRequest dto) {
-//        User user = userRepository.findById(id)
-//                .orElseThrow(() -> new EntityNotFoundException("User not found"));
-//
-//        user.setEmail(dto.getEmail());
-//        user.setStatus(dto.getStatus());
-//        user.setLanguage(dto.getLanguage());
-//
-//        return userRepository.save(user);
-//    }
-
-    public User update(Long id, User user) {
-        // Check if user exists
-        User existingUser = userRepository.findById(id)
+    public User update(Long id, UserUpdateRequest request) {
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + id));
 
-        // Update fields (avoid updating ID or other protected fields unless required)
-        existingUser.setUsername(user.getUsername());
-        existingUser.setFullname(user.getFullname());
-        existingUser.setEmail(user.getEmail());
-        existingUser.setPassword(user.getPassword()); // ideally encrypt before saving
-        existingUser.setStatus(user.getStatus());
-        existingUser.setEnabled(user.getEnabled());
-        existingUser.setRoles(user.getRoles());
+        user.setUsername(request.getUsername());
+        user.setFullname(request.getFullname());
+        user.setEmail(request.getEmail());
+        if (request.getPassword() != null && !request.getPassword().isBlank()) {
+            user.setPassword(passwordEncoder.encode(request.getPassword())); // Encrypt!
+        }
+        user.setStatus(request.getStatus());
+        user.setEnabled(request.getEnabled());
+        user.setLanguage(request.getLanguage());
 
-        return userRepository.save(existingUser);
+        if (request.getRoleIds() != null) {
+            Set<Role> roles = new HashSet<>(roleRepository.findAllById(request.getRoleIds()));
+            user.setRoles(roles);
+        }
+        user.setId(id);
+//        try {
+            userRepository.save(user);
+//        } catch (TransactionSystemException ex) {
+//            Throwable cause = ex.getRootCause();
+//            System.err.println("Transaction failed: " + cause);
+//            throw ex; // Or wrap into a ResponseEntity with cause.getMessage()
+//        }
+        User updatedUser = userRepository.save(user);
+        return updatedUser;
     }
+
 
     public boolean delete(Long id) {
         if (!userRepository.existsById(id)) return false;

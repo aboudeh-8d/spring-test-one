@@ -1,27 +1,28 @@
-package com.bezkoder.spring.security.login.dto.response;
+package com.bezkoder.spring.security.login.payload.response;
 
 import com.bezkoder.spring.security.login.enums.EUserLanguage;
 import com.bezkoder.spring.security.login.enums.EUserStatus;
 import com.bezkoder.spring.security.login.service.helper.EnumLocalizationUtil;
 import com.bezkoder.spring.security.login.service.helper.LocalizedEnum;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
-
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class UserInfoResponse {
     private Long id;
     private String username;
     private String email;
     private List<String> roles;
-    private EUserStatus status;
-    private EUserLanguage language;
+    private LocalizedEnum status;
+    private LocalizedEnum language;
 
     public UserInfoResponse(Long id, String username, String email, List<String> roles, EUserStatus status, EUserLanguage language) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.roles = roles;
-        this.status = status;
-        this.language = language;
+        this.status = EnumLocalizationUtil.localizeEnum(status, "user_status");
+        this.language = EnumLocalizationUtil.localizeEnum(language, "user_language");
     }
 
     public Long getId() {
@@ -53,19 +54,19 @@ public class UserInfoResponse {
     }
 
     public LocalizedEnum getStatus() {
-        return EnumLocalizationUtil.localizeEnum(this.status, "user_status");
+        return this.status;
     }
 
     public void setStatus(EUserStatus status) {
-        this.status = status;
+        this.status = EnumLocalizationUtil.localizeEnum(status, "user_status");
     }
 
     public LocalizedEnum getLanguage() {
-        return EnumLocalizationUtil.localizeEnum(this.language, "user_language");
+        return this.language;
     }
 
     public void setLanguage(EUserLanguage language) {
-        this.language = language;
+        this.language = EnumLocalizationUtil.localizeEnum(language, "user_language");
     }
 
 

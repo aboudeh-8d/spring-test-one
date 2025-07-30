@@ -6,33 +6,25 @@ import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.util.Locale;
 
+
 public class LocalizedEnum {
     private String code;
-    private String value;
+    private String display;
 
-    public LocalizedEnum(String code, String value) {
+    public LocalizedEnum() {
+    }
+
+    public LocalizedEnum(String code, String display) {
         this.code = code;
-        this.value = value;
+        this.display = display;
     }
-
-    @Autowired
-    private static MessageSource messageSource;
-    @Autowired
-    private TranslationService translationService;
-
-    public LocalizedEnum localizeEnum(Enum<?> enumValue, String prefix) {
-        String key = enumValue.name();
-        String translationKey = prefix + "." + key.toLowerCase();
-        String value = translationService.getMessage(translationKey);
-        return new LocalizedEnum(key, value);
-    }
-
 
     public String getCode() {
         return code;
     }
 
-    public String getValue() {
-        return value;
+    public String getDisplay() {
+        return display;
     }
 }
+

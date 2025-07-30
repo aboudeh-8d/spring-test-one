@@ -1,20 +1,28 @@
 package com.bezkoder.spring.security.login.controllers;
 
 import com.bezkoder.spring.security.login.config.MyLocalResolver;
-import com.bezkoder.spring.security.login.dto.projection.UserSummary;
+import com.bezkoder.spring.security.login.entity.Role;
+import com.bezkoder.spring.security.login.payload.request.UserUpdateRequest;
+import com.bezkoder.spring.security.login.payload.projection.UserSummary;
 import com.bezkoder.spring.security.login.entity.User;
 import com.bezkoder.spring.security.login.service.UserService;
-import com.bezkoder.spring.security.login.dto.response.UserInfoResponse;
+import com.bezkoder.spring.security.login.payload.response.UserInfoResponse;
 
 import com.bezkoder.spring.security.login.service.helper.TranslationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
+import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/users")
@@ -119,13 +127,27 @@ public class UserController {
         }
     }
 
+//    @Transactional
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User user) {
-        try {
-            return ResponseEntity.ok(userService.update(id ,user));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<UserInfoResponse> updateUser(@PathVariable Long id,
+                                        @Valid @RequestBody UserUpdateRequest updateRequest) {
+        User updatedUser = userService.update(id, updateRequest);
+        List<String> roles = updatedUser.getRoles().stream()
+                .filter(Objects::nonNull)
+                .map(Role::getName)
+                .filter(Objects::nonNull)
+                .map(Enum::name)
+                .toList();
+
+        UserInfoResponse response = new UserInfoResponse(
+                updatedUser.getId(),
+                updatedUser.getUsername(),
+                updatedUser.getEmail(),
+                roles,
+                updatedUser.getStatus(),
+                updatedUser.getLanguage()
+        );
+            return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
