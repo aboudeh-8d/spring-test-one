@@ -11,14 +11,16 @@ import java.util.List;
 public class UserInfoResponse {
     private Long id;
     private String username;
+    private String fullname;
     private String email;
     private List<String> roles;
     private LocalizedEnum status;
     private LocalizedEnum language;
 
-    public UserInfoResponse(Long id, String username, String email, List<String> roles, EUserStatus status, EUserLanguage language) {
+    public UserInfoResponse(Long id, String username, String fullname, String email, List<String> roles, EUserStatus status, EUserLanguage language) {
         this.id = id;
         this.username = username;
+        this.fullname = fullname;
         this.email = email;
         this.roles = roles;
         this.status = EnumLocalizationUtil.localizeEnum(status, "user_status");
@@ -47,6 +49,14 @@ public class UserInfoResponse {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
     }
 
     public List<String> getRoles() {

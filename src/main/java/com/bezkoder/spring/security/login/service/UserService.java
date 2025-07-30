@@ -22,6 +22,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 //public class UserService extends BaseService<User, Long> implements UserService {
@@ -63,35 +64,32 @@ public class UserService extends BaseService<User, Long>{
         return userRepository.save(user);
     }
 
-    public User update(Long id, UserUpdateRequest request) {
+    public User update(Long id, UserUpdateRequest dto) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
 
-        user.setUsername(request.getUsername());
-        user.setFullname(request.getFullname());
-        user.setEmail(request.getEmail());
-        if (request.getPassword() != null && !request.getPassword().isBlank()) {
-            user.setPassword(passwordEncoder.encode(request.getPassword())); // Encrypt!
+        updateNonNullFields(dto, user);
+
+        // Handle special cases manually (e.g., password needs encoding, roles need fetching)
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
+            user.setPassword(passwordEncoder.encode(dto.getPassword()));
         }
-        user.setStatus(request.getStatus());
-        user.setEnabled(request.getEnabled());
-        user.setLanguage(request.getLanguage());
 
-        if (request.getRoleIds() != null) {
-            Set<Role> roles = new HashSet<>(roleRepository.findAllById(request.getRoleIds()));
+        if (dto.getRoleIds() != null && !dto.getRoleIds().isEmpty()) {
+            Set<Role> roles = roleRepository.findAllById(dto.getRoleIds()).stream().collect(Collectors.toSet());
             user.setRoles(roles);
         }
-        user.setId(id);
-//        try {
-            userRepository.save(user);
+
+        return userRepository.save(user);
+        //        try {
+//            userRepository.save(user);
 //        } catch (TransactionSystemException ex) {
 //            Throwable cause = ex.getRootCause();
 //            System.err.println("Transaction failed: " + cause);
 //            throw ex; // Or wrap into a ResponseEntity with cause.getMessage()
 //        }
-        User updatedUser = userRepository.save(user);
-        return updatedUser;
     }
+
 
 
     public boolean delete(Long id) {

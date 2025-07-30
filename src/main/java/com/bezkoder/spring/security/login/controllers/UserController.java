@@ -51,7 +51,7 @@ public class UserController {
                     List<String> roles = user.getRoles().stream()
                             .map(role -> role.getName().name())
                             .toList();
-                    return new UserInfoResponse(user.getId(), user.getUsername(), user.getEmail(), roles, user.getStatus(), user.getLanguage());
+                    return new UserInfoResponse(user.getId(), user.getUsername(), user.getFullname(),  user.getEmail(), roles, user.getStatus(), user.getLanguage());
                 }).toList();
 
         return ResponseEntity.ok(response); // HTTP 200 with body
@@ -74,6 +74,7 @@ public class UserController {
             return new UserInfoResponse(
                     user.getId(),
                     user.getUsername(),
+                    user.getFullname(),
                     user.getEmail(),
                     roles,
                     user.getStatus(),
@@ -108,6 +109,7 @@ public class UserController {
                     UserInfoResponse response = new UserInfoResponse(
                             user.getId(),
                             user.getUsername(),
+                            user.getFullname(),
                             user.getEmail(),
                             roles,
                             user.getStatus(),
@@ -142,6 +144,7 @@ public class UserController {
         UserInfoResponse response = new UserInfoResponse(
                 updatedUser.getId(),
                 updatedUser.getUsername(),
+                updatedUser.getFullname(),
                 updatedUser.getEmail(),
                 roles,
                 updatedUser.getStatus(),

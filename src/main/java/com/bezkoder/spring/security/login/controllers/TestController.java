@@ -63,7 +63,7 @@ public class TestController {
                     List<String> roles = user.getRoles().stream()
                             .map(role -> role.getName().name())
                             .toList();
-                    return new UserInfoResponse(user.getId(), user.getUsername(), user.getEmail(), roles, user.getStatus(), user.getLanguage());
+                    return new UserInfoResponse(user.getId(), user.getUsername(),user.getFullname(), user.getEmail(), roles, user.getStatus(), user.getLanguage());
                 }).toList();
 
         return ResponseEntity.ok(response); // HTTP 200 with body

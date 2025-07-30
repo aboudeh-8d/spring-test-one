@@ -4,25 +4,22 @@ import com.bezkoder.spring.security.login.enums.EUserLanguage;
 import com.bezkoder.spring.security.login.enums.EUserStatus;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
 public class UserUpdateRequest {
-    @NotBlank
-    @Size(max = 20)
+
+    @Size(max = 20, message = "Username must be at most 20 characters")
     private String username;
 
-    @NotBlank
-    @Size(max = 20)
+    @Size(max = 20, message = "Full name must be at most 20 characters")
     private String fullname;
 
-    @Email
-    @NotBlank
-    @Size(max = 50)
+    @Email(message = "Email must be valid")
+    @Size(max = 50, message = "Email must be at most 50 characters")
     private String email;
 
-    @Size(max = 120)
+    @Size(max = 120, message = "Password must be at most 120 characters")
     private String password;
 
     private EUserStatus status;
@@ -31,39 +28,39 @@ public class UserUpdateRequest {
 
     private EUserLanguage language;
 
-    private Set<Long> roleIds; // Role IDs to update roles
+    private Set<Long> roleIds;
 
     // Getters and Setters
 
-    public @NotBlank @Size(max = 20) String getUsername() {
+    public String getUsername() {
         return username;
     }
 
-    public void setUsername(@NotBlank @Size(max = 20) String username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 
-    public @NotBlank @Size(max = 20) String getFullname() {
+    public String getFullname() {
         return fullname;
     }
 
-    public void setFullname(@NotBlank @Size(max = 20) String fullname) {
+    public void setFullname(String fullname) {
         this.fullname = fullname;
     }
 
-    public @Email @NotBlank @Size(max = 50) String getEmail() {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(@Email @NotBlank @Size(max = 50) String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    public @Size(max = 120) String getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(@Size(max = 120) String password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 
@@ -75,11 +72,11 @@ public class UserUpdateRequest {
         this.status = status;
     }
 
-    public Boolean getEnabled() {
+    public Boolean getIsEnabled() {
         return isEnabled;
     }
 
-    public void setEnabled(Boolean enabled) {
+    public void setIsEnabled(Boolean enabled) {
         isEnabled = enabled;
     }
 
